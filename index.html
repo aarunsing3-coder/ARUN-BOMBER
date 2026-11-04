@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARUN BOMBER</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ARUN BOMBER</h1>
+        <form id="bomberForm">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" required>
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" required>
+            <label for="count">Number of Messages:</label>
+            <input type="number" id="count" name="count" min="1" required>
+            <button type="submit">Send Messages</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
