@@ -46,6 +46,12 @@ input {
     font-size: 1.1em;
 }
 
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
 button {
     padding: 10px;
     background-color: #0f0;
@@ -59,6 +65,16 @@ button {
 
 button:hover {
     background-color: #0ff;
+}
+
+#stopButton {
+    background-color: #f00;
+    color: #fff;
+    text-shadow: 0 0 5px #f00;
+}
+
+#stopButton:hover {
+    background-color: #ff0;
 }
 
 #result {
